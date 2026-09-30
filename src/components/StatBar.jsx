@@ -2,11 +2,11 @@ import { useCountUp, useInView } from "../hooks.js";
 
 const STAT_LABELS = {
   hp: "HP",
-  attack: "Serangan",
-  defense: "Pertahanan",
-  "special-attack": "Serangan Spesial",
-  "special-defense": "Pertahanan Spesial",
-  speed: "Kecepatan",
+  attack: "Attack",
+  defense: "Defense",
+  "special-attack": "Sp. Attack",
+  "special-defense": "Sp. Defense",
+  speed: "Speed",
 };
 
 function StatBar({ stat, value, delay = 0 }) {
@@ -15,7 +15,7 @@ function StatBar({ stat, value, delay = 0 }) {
 
   return (
     <li className="stat" ref={ref}>
-      <span className="stat__label">{STAT_LABELS[stat] || capitalizeStat(stat)}</span>
+      <span className="stat__label">{STAT_LABELS[stat] || stat.replace(/-/g, " ")}</span>
       <span className="stat__track">
         <span
           className="stat__fill"
@@ -28,10 +28,6 @@ function StatBar({ stat, value, delay = 0 }) {
       <span className="stat__value">{shown}</span>
     </li>
   );
-}
-
-function capitalizeStat(stat) {
-  return stat.replace(/-/g, " ");
 }
 
 export default StatBar;

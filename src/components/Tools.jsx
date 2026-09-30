@@ -9,10 +9,10 @@ export function ThemeToggle() {
       type="button"
       className="tool"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      title={isDark ? "Ganti ke mode siang" : "Ganti ke mode malam"}
+      title={isDark ? "Switch to day mode" : "Switch to night mode"}
     >
       <span className="tool__glyph">{isDark ? "☾" : "☀"}</span>
-      <span className="tool__label">{isDark ? "Malam" : "Siang"}</span>
+      <span className="tool__label">{isDark ? "Night" : "Day"}</span>
     </button>
   );
 }
@@ -25,10 +25,10 @@ export function SoundToggle() {
       type="button"
       className="tool"
       onClick={() => setSoundOn(!soundOn)}
-      title={soundOn ? "Bisukan suara Pokémon" : "Nyalakan suara Pokémon"}
+      title={soundOn ? "Mute Pokémon sounds" : "Unmute Pokémon sounds"}
     >
       <span className="tool__glyph">{soundOn ? "◉" : "○"}</span>
-      <span className="tool__label">{soundOn ? "Suara" : "Bisu"}</span>
+      <span className="tool__label">{soundOn ? "Sound" : "Muted"}</span>
     </button>
   );
 }

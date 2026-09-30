@@ -23,26 +23,33 @@ function SearchBar({ value, onChange, onEnter, matches, total }) {
           onKeyDown={(event) => {
             if (event.key === "Escape") onChange("");
           }}
-          placeholder="Cari nama atau nomor Pokédex…"
+          placeholder="Search by name or Pokédex number…"
           autoComplete="off"
           spellCheck="false"
-          aria-label="Cari Pokémon"
+          aria-label="Search Pokémon"
         />
         {value && (
-          <button type="button" className="search__clear" onClick={() => { onChange(""); inputRef.current?.focus(); }}>
+          <button
+            type="button"
+            className="search__clear"
+            onClick={() => {
+              onChange("");
+              inputRef.current?.focus();
+            }}
+          >
             ✕
           </button>
         )}
         <button type="submit" className="search__go">
-          Buka
+          Open
         </button>
       </form>
 
       <p className="search__hint">
         <span className="search__count">
-          {matches} / {total} entri
+          {matches} / {total} entries
         </span>
-        {matches > 0 && <span className="search__enter">Enter membuka entri pertama</span>}
+        {matches > 0 && <span className="search__enter">Enter opens the first match</span>}
       </p>
     </div>
   );

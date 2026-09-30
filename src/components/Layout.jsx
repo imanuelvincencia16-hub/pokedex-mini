@@ -24,7 +24,7 @@ function Layout() {
           <Pokeball className="brand__ball" />
           <span className="brand__text">
             <strong>POKÉDEX</strong>
-            <small>arsip nasional</small>
+            <small>national archive</small>
           </span>
         </Link>
 
@@ -33,9 +33,9 @@ function Layout() {
             Dex
           </NavLink>
           <NavLink to="/quiz" className="nav__link">
-            Kuis
+            Quiz
           </NavLink>
-          <span className="nav__count" title="Pokémon yang kamu simpan">
+          <span className="nav__count" title="Pokémon you have saved">
             ★ {favorites.length}
           </span>
         </nav>
@@ -51,9 +51,9 @@ function Layout() {
       </main>
 
       <footer className="foot">
-        <span>Data &amp; artwork dari PokéAPI</span>
+        <span>Data &amp; artwork from PokéAPI</span>
         <span className="foot__dot">·</span>
-        <span>React + Vite, tanpa backend</span>
+        <span>React + Vite, no backend</span>
       </footer>
     </div>
   );

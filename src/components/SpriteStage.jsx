@@ -11,9 +11,9 @@ function buildViews(pokemon) {
       src: sprites.other?.["official-artwork"]?.front_default,
       pixel: false,
     },
-    { key: "front", label: "Depan", src: sprites.front_default, pixel: true },
-    { key: "back", label: "Belakang", src: sprites.back_default, pixel: true },
-    { key: "animated", label: "Animasi", src: animated?.front_default, pixel: true },
+    { key: "front", label: "Front", src: sprites.front_default, pixel: true },
+    { key: "back", label: "Back", src: sprites.back_default, pixel: true },
+    { key: "animated", label: "Animated", src: animated?.front_default, pixel: true },
     {
       key: "shiny",
       label: "Shiny",
@@ -40,7 +40,7 @@ function SpriteStage({ pokemon }) {
         key={`${pokemon.id}-${view.key}`}
         className="stage__img"
         src={view.src}
-        alt={`${pokemon.name} — tampilan ${view.label}`}
+        alt={`${pokemon.name} — ${view.label.toLowerCase()} view`}
         width={220}
         height={220}
       />

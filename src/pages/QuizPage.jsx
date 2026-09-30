@@ -12,7 +12,7 @@ const TIME = 20;
 const POOLS = {
   kanto: { label: "Kanto", size: 151 },
   // Ids above 1025 are alternate forms (Mega, etc.) - the quiz draws species only.
-  national: { label: "Nasional", size: 1025 },
+  national: { label: "National", size: 1025 },
 };
 
 function normalize(text) {
@@ -22,9 +22,9 @@ function normalize(text) {
 function rank(hits) {
   if (hits >= 9) return "Master Trainer";
   if (hits >= 7) return "Gym Leader";
-  if (hits >= 5) return "Ranger Pokédex";
-  if (hits >= 3) return "Anak Pelatihan";
-  return "Pemula";
+  if (hits >= 5) return "Pokédex Ranger";
+  if (hits >= 3) return "Trainer";
+  return "Beginner";
 }
 
 function QuizPage() {
@@ -45,6 +45,7 @@ function QuizPage() {
 
   useEffect(() => {
     setAccent("#f4d23c");
+    document.title = "Quiz · Who is that Pokémon?";
   }, [setAccent]);
 
   function draw(taken) {
@@ -126,13 +127,13 @@ function QuizPage() {
     return (
       <section className="quiz quiz--menu">
         <Pokeball spinning className="quiz__ball" />
-        <h2 className="quiz__title">Siapa Pokémon ini?</h2>
+        <h2 className="quiz__title">Who is this Pokémon?</h2>
         <p className="quiz__lead">
-          Sepuluh siluet, dua puluh detik untuk masing-masing. Tebak lewat nama atau nomor
-          Pokédex. Pakai tombol intip kalau mentok — nilainya dipotong 40.
+          Ten silhouettes, twenty seconds each. Answer with a name or a Pokédex number. Use the peek
+          button when you are stuck — it costs 40 points.
         </p>
 
-        <div className="quiz__pools" role="group" aria-label="Pilih wilayah">
+        <div className="quiz__pools" role="group" aria-label="Choose a region">
           {Object.entries(POOLS).map(([key, value]) => (
             <button
               key={key}
@@ -147,9 +148,9 @@ function QuizPage() {
         </div>
 
         <button type="button" className="btn btn--big" onClick={start}>
-          Mulai kuis
+          Start the quiz
         </button>
-        {best > 0 && <p className="quiz__best">Skor terbaik: {best}</p>}
+        {best > 0 && <p className="quiz__best">Best score: {best}</p>}
       </section>
     );
   }
@@ -157,18 +158,18 @@ function QuizPage() {
   if (phase === "done") {
     return (
       <section className="quiz quiz--done">
-        <h2 className="quiz__title">Pemeriksaan selesai</h2>
+        <h2 className="quiz__title">Field exam complete</h2>
         <p className="quiz__points">{score}</p>
         <p className="quiz__lead">
-          {hits} dari {ROUNDS} terjawab · peringkat <strong>{rank(hits)}</strong> · skor terbaik{" "}
+          {hits} of {ROUNDS} identified · rank <strong>{rank(hits)}</strong> · best score{" "}
           {Math.max(best, score)}
         </p>
         <div className="quiz__actions">
           <button type="button" className="btn btn--big" onClick={start}>
-            Main lagi
+            Play again
           </button>
           <Link to="/" className="btn btn--ghost">
-            Ke arsip
+            Back to the archive
           </Link>
         </div>
       </section>
@@ -181,12 +182,12 @@ function QuizPage() {
     <section className={`quiz quiz--play${verdict ? ` is-${verdict}` : ""}`}>
       <header className="quiz__bar">
         <span className="quiz__round">
-          Ronde {round} / {ROUNDS}
+          Round {round} / {ROUNDS}
         </span>
         <span className={`quiz__streak${streak > 1 ? " is-hot" : ""}`}>
-          {streak > 1 ? `×${streak} beruntun` : "Rangkaian: —"}
+          {streak > 1 ? `×${streak} streak` : "Streak: —"}
         </span>
-        <span className="quiz__score">{score} poin</span>
+        <span className="quiz__score">{score} pts</span>
       </header>
 
       <div className="quiz__timer" aria-hidden="true">
@@ -208,7 +209,7 @@ function QuizPage() {
                 ? target.sprites.other["official-artwork"].front_default
                 : target.sprites.front_default
             }
-            alt={revealed ? target.name : "Siluet Pokémon"}
+            alt={revealed ? target.name : "Pokémon silhouette"}
             width={230}
             height={230}
           />
@@ -229,19 +230,19 @@ function QuizPage() {
       {verdict && target ? (
         <div className="quiz__result">
           <h3 className="quiz__verdict">
-            {verdict === "correct" ? "Tepat sekali!" : verdict === "timeout" ? "Waktu habis" : "Belum tepat"}
+            {verdict === "correct" ? "Nailed it!" : verdict === "timeout" ? "Time is up" : "Not quite"}
           </h3>
           <p className="quiz__answer">{capitalize(target.name)}</p>
           <p className="quiz__facts">
-            Tinggi {(target.height / 10).toFixed(1)} m · Berat {(target.weight / 10).toFixed(1)} kg ·{" "}
-            {target.base_experience ?? 0} EXP dasar
+            Height {(target.height / 10).toFixed(1)} m · Weight {(target.weight / 10).toFixed(1)} kg ·{" "}
+            {target.base_experience ?? 0} base EXP
           </p>
           <div className="quiz__actions">
             <Link to={`/pokemon/${target.name}`} className="btn btn--ghost">
-              Buka entri
+              Open entry
             </Link>
             <button type="button" className="btn btn--big" onClick={next}>
-              {round >= ROUNDS ? "Lihat hasil" : "Lanjut →"}
+              {round >= ROUNDS ? "See results" : "Next →"}
             </button>
           </div>
         </div>
@@ -253,13 +254,13 @@ function QuizPage() {
             value={answer}
             autoFocus
             onChange={(event) => setAnswer(event.target.value)}
-            placeholder="Ketik nama Pokémon…"
+            placeholder="Type a Pokémon name…"
             autoComplete="off"
             spellCheck="false"
-            aria-label="Tebakan nama Pokémon"
+            aria-label="Pokémon name guess"
           />
           <button type="submit" className="btn btn--big" disabled={!target}>
-            Tebak
+            Guess
           </button>
           <button
             type="button"
@@ -267,7 +268,7 @@ function QuizPage() {
             disabled={hinted}
             onClick={() => setHinted(true)}
           >
-            {hinted ? "Intip dipakai (−40)" : "Intip (−40)"}
+            {hinted ? "Peek used (−40)" : "Peek (−40)"}
           </button>
         </form>
       )}

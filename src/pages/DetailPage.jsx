@@ -49,7 +49,7 @@ function DetailPage() {
   useEffect(() => {
     document.title = pokemon
       ? `${capitalize(pokemon.name)} · Pokédex`
-      : "Pokédex · Arsip Nasional";
+      : "Pokédex · National Archive";
   }, [pokemon]);
 
   useEffect(() => {
@@ -104,7 +104,7 @@ function DetailPage() {
     return (
       <div className="state">
         <Pokeball spinning className="state__ball" />
-        <h2>Memindai entri “{slug}”…</h2>
+        <h2>Scanning “{slug}”…</h2>
       </div>
     );
   }
@@ -113,12 +113,12 @@ function DetailPage() {
     return (
       <div className="state">
         <Pokeball className="state__ball" />
-        <h2>Entri tidak ditemukan</h2>
+        <h2>Entry not found</h2>
         <p className="state__note">
-          Tidak ada Pokémon bernama atau bernomor “{slug}”. Periksa kembali ejaannya.
+          There is no Pokémon named or numbered “{slug}”. Check the spelling and try again.
         </p>
         <Link to="/" className="btn">
-          ← Kembali ke arsip
+          ← Back to the archive
         </Link>
       </div>
     );
@@ -133,7 +133,7 @@ function DetailPage() {
     <article className="detail">
       <header className="detail__bar">
         <Link to="/" className="crumb">
-          ← Arsip
+          ← Archive
         </Link>
         <div className="pager">
           <button
@@ -141,7 +141,7 @@ function DetailPage() {
             className="pager__btn"
             disabled={!neighbours.prev}
             onClick={() => navigate(`/pokemon/${neighbours.prev.name}`)}
-            title={neighbours.prev ? `Sebelumnya: ${capitalize(neighbours.prev.name)}` : "Tidak ada entri sebelumnya"}
+            title={neighbours.prev ? `Previous: ${capitalize(neighbours.prev.name)}` : "First entry"}
           >
             ‹
           </button>
@@ -151,7 +151,7 @@ function DetailPage() {
             className="pager__btn"
             disabled={!neighbours.next}
             onClick={() => navigate(`/pokemon/${neighbours.next.name}`)}
-            title={neighbours.next ? `Berikutnya: ${capitalize(neighbours.next.name)}` : "Tidak ada entri berikutnya"}
+            title={neighbours.next ? `Next: ${capitalize(neighbours.next.name)}` : "Last entry"}
           >
             ›
           </button>
@@ -186,9 +186,9 @@ function DetailPage() {
               className="btn btn--ghost"
               onClick={() => playCry(cryUrl)}
               disabled={!cryUrl}
-              title={soundOn ? "Putar suara Pokémon ini" : "Suara sedang dimatikan"}
+              title={soundOn ? "Play this Pokémon's cry" : "Sound is muted"}
             >
-              ♪ Suara {soundOn ? "" : "(bisu)"}
+              ♪ Cry{soundOn ? "" : " (muted)"}
             </button>
           </div>
         </div>
@@ -196,7 +196,7 @@ function DetailPage() {
 
       <div className="panels">
         <section className="panel">
-          <h3 className="panel__title">Stat dasar</h3>
+          <h3 className="panel__title">Base stats</h3>
           <ul className="stats">
             {pokemon.stats.map((entry, index) => (
               <StatBar
@@ -213,21 +213,21 @@ function DetailPage() {
         </section>
 
         <section className="panel">
-          <h3 className="panel__title">Data fisik</h3>
-          <Measure label="Tinggi" value={formatMeters(pokemon.height)} ratio={pokemon.height / 140} />
-          <Measure label="Berat" value={formatKilograms(pokemon.weight)} ratio={Math.sqrt(pokemon.weight / 999)} />
+          <h3 className="panel__title">Physical data</h3>
+          <Measure label="Height" value={formatMeters(pokemon.height)} ratio={pokemon.height / 140} />
+          <Measure label="Weight" value={formatKilograms(pokemon.weight)} ratio={Math.sqrt(pokemon.weight / 999)} />
 
           <dl className="facts">
             <div>
-              <dt>Pengalaman dasar</dt>
+              <dt>Base experience</dt>
               <dd>{pokemon.base_experience ?? "—"}</dd>
             </div>
             <div>
-              <dt>Laju evolusi</dt>
+              <dt>Growth rate</dt>
               <dd>{species ? capitalize(species.growth_rate.name) : "—"}</dd>
             </div>
             <div>
-              <dt>Tingkat tangkap</dt>
+              <dt>Capture rate</dt>
               <dd>{species?.capture_rate ?? "—"}</dd>
             </div>
             <div>
@@ -238,26 +238,27 @@ function DetailPage() {
         </section>
 
         <section className="panel">
-          <h3 className="panel__title">Ability</h3>
+          <h3 className="panel__title">Abilities</h3>
           <ul className="abilities">
             {pokemon.abilities.map((entry) => (
               <li key={entry.ability.name} className={entry.is_hidden ? "is-hidden" : ""}>
                 <span>{capitalize(entry.ability.name)}</span>
-                <em>{entry.is_hidden ? "tersembunyi" : "umum"}</em>
+                <em>{entry.is_hidden ? "hidden" : "regular"}</em>
               </li>
             ))}
           </ul>
           <p className="panel__foot">
-            {pokemon.forms.length} bentuk · {pokemon.moves.length} jurus tercatat
+            {pokemon.forms.length} {pokemon.forms.length === 1 ? "form" : "forms"} ·{" "}
+            {pokemon.moves.length} moves recorded
           </p>
         </section>
 
         <section className="panel panel--wide">
-          <h3 className="panel__title">Rantai evolusi</h3>
+          <h3 className="panel__title">Evolution chain</h3>
           {chain ? (
             <EvolutionChain chain={chain} currentName={pokemon.name} />
           ) : (
-            <p className="state__note">Menyusun silsilah…</p>
+            <p className="state__note">Building the family tree…</p>
           )}
         </section>
       </div>

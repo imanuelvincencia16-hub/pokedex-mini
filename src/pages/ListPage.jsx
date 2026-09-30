@@ -4,7 +4,7 @@ import { getType } from "../api.js";
 import { DEFAULT_ACCENT, DEX_SIZE, PAGE_SIZE } from "../config.js";
 import { useDex } from "../hooks.js";
 import { useStore } from "../store.jsx";
-import { typeColor } from "../utils.js";
+import { capitalize, typeColor } from "../utils.js";
 import SearchBar from "../components/SearchBar.jsx";
 import TypeChips from "../components/TypeChips.jsx";
 import PokemonCard from "../components/PokemonCard.jsx";
@@ -33,6 +33,10 @@ function ListPage() {
   useEffect(() => {
     setAccent(type ? typeColor(type) : DEFAULT_ACCENT);
   }, [type, setAccent]);
+
+  useEffect(() => {
+    document.title = "Pokédex · National Archive";
+  }, []);
 
   useEffect(() => {
     if (!type) {
@@ -96,10 +100,10 @@ function ListPage() {
     return (
       <div className="state">
         <Pokeball className="state__ball" />
-        <h2>Arsip tidak bisa dihubungi</h2>
+        <h2>The archive is unreachable</h2>
         <p className="state__note">{error}</p>
         <button type="button" className="btn" onClick={() => window.location.reload()}>
-          Coba lagi
+          Try again
         </button>
       </div>
     );
@@ -109,8 +113,8 @@ function ListPage() {
     return (
       <div className="state">
         <Pokeball spinning className="state__ball" />
-        <h2>Menyinkronkan arsip…</h2>
-        <p className="state__note">Mengambil {DEX_SIZE} entri dari PokéAPI.</p>
+        <h2>Syncing the archive…</h2>
+        <p className="state__note">Fetching {DEX_SIZE} entries from PokéAPI.</p>
       </div>
     );
   }
@@ -132,11 +136,11 @@ function ListPage() {
             className={`toggle${onlyFavorites ? " is-on" : ""}`}
             onClick={() => setOnlyFavorites((value) => !value)}
           >
-            ★ Tim saya
+            ★ My team
             <span className="toggle__badge">{favorites.length}</span>
           </button>
 
-          <div className="sorter" role="group" aria-label="Urutkan">
+          <div className="sorter" role="group" aria-label="Sort entries">
             <button type="button" className={sort === "id" ? "is-on" : ""} onClick={() => setSort("id")}>
               No. ↑
             </button>
@@ -155,8 +159,8 @@ function ListPage() {
       {typeLoading ? (
         <div className="state">
           <Pokeball spinning className="state__ball" />
-          <h2>Memindai tipe {type}…</h2>
-          <p className="state__note">Menarik daftar Pokémon bertipe ini dari PokéAPI.</p>
+          <h2>Scanning {capitalize(type)} type…</h2>
+          <p className="state__note">Pulling this type&apos;s roster from PokéAPI.</p>
         </div>
       ) : shown.length > 0 ? (
         <ul className="grid">
@@ -166,9 +170,9 @@ function ListPage() {
         </ul>
       ) : (
         <div className="state state--empty">
-          <h2>Tidak ada yang cocok</h2>
+          <h2>Nothing matched</h2>
           <p className="state__note">
-            Coba hapus filter tipe atau periksa kembali ejaan nama Pokémon.
+            Try clearing the type filter, or double-check how the name is spelled.
           </p>
           <button
             type="button"
@@ -179,7 +183,7 @@ function ListPage() {
               setOnlyFavorites(false);
             }}
           >
-            Reset filter
+            Reset filters
           </button>
         </div>
       )}
@@ -187,7 +191,7 @@ function ListPage() {
       {hasMore && (
         <div className="more" ref={sentinelRef}>
           <button type="button" className="btn btn--ghost" onClick={() => setVisible((value) => value + PAGE_SIZE)}>
-            Tampilkan {Math.min(PAGE_SIZE, filtered.length - visible)} entri lagi
+            Show {Math.min(PAGE_SIZE, filtered.length - visible)} more entries
           </button>
         </div>
       )}

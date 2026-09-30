@@ -7,7 +7,7 @@ export function api(path) {
 
   const request = fetch(`${API_BASE_URL}${path}`).then((response) => {
     if (!response.ok) {
-      throw new Error(`PokéAPI balas dengan status ${response.status}`);
+      throw new Error(`PokéAPI responded with status ${response.status}`);
     }
     return response.json();
   });

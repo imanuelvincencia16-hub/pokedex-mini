@@ -3,14 +3,14 @@ import { capitalize, typeColor } from "../utils.js";
 
 function TypeChips({ active, onChange }) {
   return (
-    <div className="chips" role="group" aria-label="Saring berdasarkan tipe">
+    <div className="chips" role="group" aria-label="Filter by type">
       <button
         type="button"
         className={`chip${active === null ? " is-on" : ""}`}
         style={{ "--chip": "var(--accent)" }}
         onClick={() => onChange(null)}
       >
-        Semua
+        All
       </button>
       {TYPES.map((type) => (
         <button

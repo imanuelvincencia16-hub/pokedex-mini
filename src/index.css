@@ -1,8 +1,8 @@
 /* ============================================================
    Pokédex Mini — design system
-   Satu bahasa visual: perangkat HUD gelap, aksen mengikuti tipe
-   Pokémon yang sedang dibuka, dan motif garis pindai (scan) yang
-   muncul di header, kartu, panggung sprite, dan kuis.
+   One visual language: a dark HUD device, an accent that follows
+   whichever Pokémon is on screen, and a scan-line motif that
+   repeats across the header, cards, sprite stage and quiz.
    ============================================================ */
 
 :root {

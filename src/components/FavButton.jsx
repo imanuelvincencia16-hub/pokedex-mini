@@ -9,7 +9,7 @@ function FavButton({ pokemon, size = "md" }) {
       type="button"
       className={`fav fav--${size}${active ? " is-on" : ""}`}
       aria-pressed={active}
-      title={active ? `Keluarkan ${pokemon.name} dari tim` : `Simpan ${pokemon.name} ke tim`}
+      title={active ? `Remove ${pokemon.name} from your team` : `Save ${pokemon.name} to your team`}
       onClick={(event) => {
         event.preventDefault();
         event.stopPropagation();

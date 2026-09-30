@@ -130,7 +130,7 @@ function QuizPage() {
         <h2 className="quiz__title">Who is this Pokémon?</h2>
         <p className="quiz__lead">
           Ten silhouettes, twenty seconds each. Answer with a name or a Pokédex number. Use the peek
-          button when you are stuck — it costs 40 points.
+          button when you are stuck. It costs 40 points.
         </p>
 
         <div className="quiz__pools" role="group" aria-label="Choose a region">
@@ -185,7 +185,7 @@ function QuizPage() {
           Round {round} / {ROUNDS}
         </span>
         <span className={`quiz__streak${streak > 1 ? " is-hot" : ""}`}>
-          {streak > 1 ? `×${streak} streak` : "Streak: —"}
+          {streak > 1 ? `×${streak} streak` : "Streak: none"}
         </span>
         <span className="quiz__score">{score} pts</span>
       </header>

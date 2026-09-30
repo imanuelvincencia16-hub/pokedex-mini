@@ -220,19 +220,19 @@ function DetailPage() {
           <dl className="facts">
             <div>
               <dt>Base experience</dt>
-              <dd>{pokemon.base_experience ?? "—"}</dd>
+              <dd>{pokemon.base_experience ?? "n/a"}</dd>
             </div>
             <div>
               <dt>Growth rate</dt>
-              <dd>{species ? capitalize(species.growth_rate.name) : "—"}</dd>
+              <dd>{species ? capitalize(species.growth_rate.name) : "n/a"}</dd>
             </div>
             <div>
               <dt>Capture rate</dt>
-              <dd>{species?.capture_rate ?? "—"}</dd>
+              <dd>{species?.capture_rate ?? "n/a"}</dd>
             </div>
             <div>
               <dt>Habitat</dt>
-              <dd>{species?.habitat ? capitalize(species.habitat.name) : "—"}</dd>
+              <dd>{species?.habitat ? capitalize(species.habitat.name) : "n/a"}</dd>
             </div>
           </dl>
         </section>

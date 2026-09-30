@@ -40,9 +40,12 @@ function SpriteStage({ pokemon }) {
         key={`${pokemon.id}-${view.key}`}
         className="stage__img"
         src={view.src}
-        alt={`${pokemon.name} — ${view.label.toLowerCase()} view`}
+        alt={`${pokemon.name} (${view.label.toLowerCase()} view)`}
         width={220}
         height={220}
+        onError={(event) => {
+          event.target.style.visibility = "hidden";
+        }}
       />
 
       <span className="stage__scan" aria-hidden="true" />

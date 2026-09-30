@@ -52,7 +52,7 @@ function EvolutionChain({ chain, currentName }) {
                   className={`evo__node${isCurrent ? " is-current" : ""}`}
                   title={`${capitalize(member.name)} · #${pad3(member.id)}`}
                 >
-                  <img src={getSpriteUrl(member.id)} alt="" width={56} height={56} loading="lazy" />
+                  <img src={getSpriteUrl(member.id)} alt="" width={56} height={56} loading="lazy" onError={(event) => { event.target.style.visibility = "hidden"; }} />
                   <span className="evo__name">{capitalize(member.name)}</span>
                 </Link>
               );

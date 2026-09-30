@@ -25,6 +25,7 @@ function ListPage() {
   const [type, setType] = useState(null);
   const [typeNames, setTypeNames] = useState(null);
   const [typeLoading, setTypeLoading] = useState(false);
+  const [typeError, setTypeError] = useState(null);
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const [sort, setSort] = useState("id");
   const [visible, setVisible] = useState(PAGE_SIZE);
@@ -41,17 +42,25 @@ function ListPage() {
   useEffect(() => {
     if (!type) {
       setTypeNames(null);
+      setTypeError(null);
       return undefined;
     }
     let active = true;
     setTypeLoading(true);
     setTypeNames(null);
+    setTypeError(null);
 
-    getType(type).then((data) => {
-      if (!active) return;
-      setTypeNames(new Set(data.pokemon.map((entry) => entry.pokemon.name)));
-      setTypeLoading(false);
-    });
+    getType(type)
+      .then((data) => {
+        if (!active) return;
+        setTypeNames(new Set(data.pokemon.map((entry) => entry.pokemon.name)));
+        setTypeLoading(false);
+      })
+      .catch((err) => {
+        if (!active) return;
+        setTypeError(err.message);
+        setTypeLoading(false);
+      });
 
     return () => {
       active = false;
@@ -156,7 +165,15 @@ function ListPage() {
         <TypeChips active={type} onChange={setType} />
       </div>
 
-      {typeLoading ? (
+      {typeError ? (
+        <div className="state state--empty">
+          <h2>The {capitalize(type)} roster is unreachable</h2>
+          <p className="state__note">{typeError}</p>
+          <button type="button" className="btn" onClick={() => setType(null)}>
+            Clear the type filter
+          </button>
+        </div>
+      ) : typeLoading ? (
         <div className="state">
           <Pokeball spinning className="state__ball" />
           <h2>Scanning {capitalize(type)} type…</h2>

@@ -2,7 +2,7 @@
 
 A Pokémon archive that behaves like an actual Pokédex device: every screen pulls its data straight
 from PokéAPI, and the accent colour, animation and sound all follow whichever Pokémon is on screen.
-Built with React + Vite — no backend.
+Built with React + Vite, no backend.
 
 **Live demo:** https://imanuelvincencia16-hub.github.io/pokedex-mini/
 
@@ -11,9 +11,9 @@ Built with React + Vite — no backend.
 | Area | What it does |
 | --- | --- |
 | Archive | 1302 entries, live search by name or number, 18 type filters, sort No.↑ No.↓ A–Z, infinite scroll |
-| Detail | Sprite stage (artwork · front · back · animated GIF · shiny), animated stat bars, abilities, flavor text, physical data, a clickable evolution chain, Pokémon cries |
+| Detail | Sprite stage with artwork, front, back, animated GIF and shiny views, animated stat bars, abilities, flavor text, physical data, a clickable evolution chain, Pokémon cries |
 | Navigation | `←` `→` arrows on the detail page step through dex numbers, glitch-themed 404 page |
-| Quiz | "Who is that Pokémon?" — silhouettes, 10 rounds, a 20-second timer, type hints, a peek button, score + streaks, Kanto/National pools |
+| Quiz | "Who is that Pokémon?": silhouettes, 10 rounds, a 20-second timer, type hints, a peek button, score + streaks, Kanto/National pools |
 | Personal | Favourite team saved in `localStorage`, day/night theme, sound can be muted |
 
 A single `/pokemon?limit=1302` request returns every name and number, so search, filtering and
@@ -63,7 +63,7 @@ src/
 The accent colour always comes from the active Pokémon or type filter, then flows into the
 background, the sprite stage ring, the stat bars and the buttons. Text drawn on top of an accent is
 picked from its luminance (`readableOn`) so it stays readable on bright types such as Electric.
-Every animation shares one motif — the scan line — and all of it switches off automatically when the
+Every animation shares one motif, the scan line, and all of it switches off automatically when the
 system asks for `prefers-reduced-motion`.
 
 Data & artwork from [PokéAPI](https://pokeapi.co/).

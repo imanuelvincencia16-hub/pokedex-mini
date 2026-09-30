@@ -49,12 +49,6 @@ function Layout() {
       <main className="page" key={location.pathname}>
         <Outlet />
       </main>
-
-      <footer className="foot">
-        <span>Data &amp; artwork from PokéAPI</span>
-        <span className="foot__dot">·</span>
-        <span>React + Vite, no backend</span>
-      </footer>
     </div>
   );
 }

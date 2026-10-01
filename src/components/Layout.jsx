@@ -35,6 +35,7 @@ function Layout() {
           <NavLink to="/quiz" className="nav__link">
             Quiz
           </NavLink>
+          <a href="./design.html" className="nav__link">Field Guide</a>
           <span className="nav__count" title="Pokémon you have saved">
             ★ {favorites.length}
           </span>

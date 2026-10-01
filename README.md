@@ -55,8 +55,24 @@ src/
 ├── utils.js            formatting, type colours, ROM text cleanup
 ├── components/         Layout, SearchBar, TypeChips, PokemonCard, SpriteStage,
 │                       StatBar, EvolutionChain, FavButton, Pokeball, Tools
+├── design/             Field Guide edition: PaperApp, Roster, EntrySpread, Notice, paper.css
 └── pages/              ListPage, DetailPage, QuizPage, NotFoundPage
 ```
+
+## Two editions
+
+The same data ships as two designs from one project:
+
+| Edition | Page | Look |
+| --- | --- | --- |
+| HUD | `index.html` | dark device shell, glitch accents, scan lines |
+| Field Guide | `design.html` | risograph print on cream stock, tilted plates, day/night paper |
+
+Both read PokéAPI through `api.js`, `config.js`, `hooks.js` and `utils.js`, but each is its own entry
+point with its own stylesheet and its own `localStorage` keys (`pokedex-paper:*` for the Field Guide),
+so neither can affect the other. `vite.config.js` lists the two HTML files under
+`build.rollupOptions.input`, which is why the build emits `dist/design.html` beside `dist/index.html`.
+The top bar links to the Field Guide, and the Field Guide rail links back.
 
 ## Design notes
 

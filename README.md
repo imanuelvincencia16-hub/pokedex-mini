@@ -74,6 +74,35 @@ so neither can affect the other. `vite.config.js` lists the two HTML files under
 `build.rollupOptions.input`, which is why the build emits `dist/design.html` beside `dist/index.html`.
 The top bar links to the Field Guide, and the Field Guide rail links back.
 
+## Changelog
+
+### 2026-10-01: Field Guide edition
+
+New page, written as its own entry and stylesheet so the HUD edition keeps the look it already had:
+
+- `design.html` and `src/design/`: a risograph print layout with a masthead rail, tilted specimen
+  plates with hard offset shadows, halftone paper grain, and a Day/Night paper-stock switch
+- Roster of all 1302 sheets with live search, three sorts, 18 type stamps, and paging in 60-sheet
+  runs instead of one long scroll
+- Entry spread with five sprite views (artwork, front, back, animated, shiny), animated count-up stat
+  bars, specimen data, abilities, a clickable evolution family with its triggers, and a play-cry button
+- Field team: stamp any sheet from the grid or the entry, saved under `pokedex-paper:team`, with its
+  own route at `#/roster/team`
+- Jump-to-dex-number box, `←` `→` paging between entries, `document.title` kept in sync per entry
+
+States and routing on this edition:
+
+- `#/entry/:name` deep links, browser back works, and an unknown sheet answers with `Entry not found`
+- Any address that is not a known route gets a `There is nothing at this address` page with a way home
+- Search validation: an empty box says `Type a name or a dex number first.` and an unmatched term
+  reports the spelling instead of firing a wasted request
+
+Changes to the existing edition (2 files):
+
+- A `Field Guide` link in the top bar, so the second design is reachable from the submitted URL
+- `vite.config.js` registers `design.html` as a second `rollupOptions.input`, so one build publishes
+  both pages and `npm run deploy` ships them together
+
 ## Design notes
 
 The accent colour always comes from the active Pokémon or type filter, then flows into the

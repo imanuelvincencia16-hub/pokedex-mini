@@ -1,23 +1,45 @@
 # Pokédex Mini
 
-A Pokémon archive that behaves like an actual Pokédex device: every screen pulls its data straight
-from PokéAPI, and the accent colour, animation and sound all follow whichever Pokémon is on screen.
-Built with React + Vite, no backend.
+A small Pokédex built with React + Vite: a list of the first 20 Pokémon from PokéAPI, a search box
+that sends you to a detail page, and a 404 page for anything else. No backend, one design, no sound.
 
 **Live demo:** https://imanuelvincencia16-hub.github.io/pokedex-mini/
 
-## Features
+## What it does
 
 | Area | What it does |
 | --- | --- |
-| Archive | 1302 entries, live search by name or number, 18 type filters, sort No.↑ No.↓ A–Z, infinite scroll |
-| Detail | Sprite stage with artwork, front, back, animated GIF and shiny views, animated stat bars, abilities, flavor text, physical data, a clickable evolution chain, Pokémon cries |
-| Navigation | `←` `→` arrows on the detail page step through dex numbers, glitch-themed 404 page |
-| Quiz | "Who is that Pokémon?": silhouettes, 10 rounds, a 20-second timer, type hints, a peek button, score + streaks, Kanto/National pools |
-| Personal | Favourite team saved in `localStorage`, day/night theme, sound can be muted |
+| List | `GET /pokemon?limit=20`, one row per Pokémon with its sprite, a padded dex number (`#001`) and a capitalized name |
+| States | "Loading Pokémon…" while the request is in flight, a red line with the server status if it fails |
+| Search | Validates an empty box before doing anything, lowercases the query, then navigates to `/pokemon/:name` |
+| Detail | Official artwork, types, the six base stats, a back link, and its own error message for a name that does not exist |
+| Routing | `HashRouter` with a shared `Layout` and an `<Outlet />`: `/`, `/pokemon/:name`, and `*` for the 404 page |
 
-A single `/pokemon?limit=1302` request returns every name and number, so search, filtering and
-sorting all run client-side with no extra requests.
+Each piece does one job. `SearchForm` only decides where to send you; whether the Pokémon exists is
+answered by `DetailPage`, which owns the fetch. The list fetches once on mount, and the detail page
+re-fetches whenever `:name` changes, with an `isCurrent` flag so a slow response for a Pokémon you
+already left cannot overwrite the screen. `document.title` follows the Pokémon that is loaded.
+
+## Structure
+
+```
+index.html
+vite.config.js           base: "/pokedex-mini/", single entry
+src/
+├── main.jsx             createRoot + StrictMode
+├── App.jsx              HashRouter, Layout, the three routes
+├── config.js            API_BASE_URL, SPRITE_BASE_URL
+├── utils.js             getIdFromUrl, capitalize, formatStatName, getSpriteUrl
+├── index.css            one stylesheet, no framework
+├── components/
+│   ├── Layout.jsx       header + <Outlet />
+│   ├── PokemonList.jsx  the list, its loading and error states
+│   └── SearchForm.jsx   the search box
+└── pages/
+    ├── ListPage.jsx     SearchForm + PokemonList
+    ├── DetailPage.jsx   one Pokémon, fetched by :name
+    └── NotFoundPage.jsx
+```
 
 ## Running locally
 
@@ -31,84 +53,40 @@ npm run lint     # oxlint
 ## Deploying to GitHub Pages
 
 ```bash
-git init
-git remote add origin https://github.com/imanuelvincencia16-hub/pokedex-mini.git
-git add . && git commit -m "Pokédex Mini" && git branch -M main && git push -u origin main
+git add . && git commit -m "..." && git push   # source code
 
-npm run deploy   # builds, then publishes dist/ to the gh-pages branch
+npm run deploy   # predeploy builds, then gh-pages publishes dist/ to the gh-pages branch
 ```
 
-Then enable the branch: **Settings → Pages → Build and deployment → Source = Deploy from a branch →
-`gh-pages` / `root`**.
+`gh-pages` is a dev dependency and `predeploy` runs the build automatically. The Pages source has to
+be set to the `gh-pages` branch under **Settings → Pages**.
 
-`vite.config.js` uses `base: "./"` and the app runs on `HashRouter`, so the site works under a GitHub
-Pages project path without any server configuration.
-
-## Structure
-
-```
-src/
-├── api.js              fetch + a promise cache per endpoint
-├── config.js           API URLs, page sizes, the 18-type colour palette
-├── hooks.js            useLocalStorage, useDex, usePokemon, useInView, useCountUp
-├── store.jsx           theme, sound, favourites, active accent colour
-├── utils.js            formatting, type colours, ROM text cleanup
-├── components/         Layout, SearchBar, TypeChips, PokemonCard, SpriteStage,
-│                       StatBar, EvolutionChain, FavButton, Pokeball, Tools
-├── design/             Field Guide edition: PaperApp, Roster, EntrySpread, Notice, paper.css
-└── pages/              ListPage, DetailPage, QuizPage, NotFoundPage
-```
-
-## Two editions
-
-The same data ships as two designs from one project:
-
-| Edition | Page | Look |
-| --- | --- | --- |
-| HUD | `index.html` | dark device shell, glitch accents, scan lines |
-| Field Guide | `design.html` | risograph print on cream stock, tilted plates, day/night paper |
-
-Both read PokéAPI through `api.js`, `config.js`, `hooks.js` and `utils.js`, but each is its own entry
-point with its own stylesheet and its own `localStorage` keys (`pokedex-paper:*` for the Field Guide),
-so neither can affect the other. `vite.config.js` lists the two HTML files under
-`build.rollupOptions.input`, which is why the build emits `dist/design.html` beside `dist/index.html`.
-The top bar links to the Field Guide, and the Field Guide rail links back.
+Because the repo is published under a project path, `vite.config.js` sets `base: "/pokedex-mini/"`,
+and the app runs on `HashRouter` so refreshing a detail URL never asks GitHub for a path it does not
+have.
 
 ## Changelog
 
+### 2026-10-05: one design, the handout skeleton
+
+The project was reduced to a single simple page:
+
+- Removed the two-edition setup (`design.html` and `src/design/`, the second build input, the cross
+  links) and the dark HUD stylesheet, fonts and animation layer
+- Removed the silhouette quiz, the 18 type filters, the favourite team, the day/night theme and every
+  sound feature (the mute toggle and the play-cry buttons)
+- Removed `api.js`, `hooks.js` and `store.jsx`; each component now fetches the way the handout does
+- `config.js` and `utils.js` are back to the handout's helpers plus one extra for stat labels, and the
+  roster request is `limit=20` again
+- Fixed the layout defects found while inspecting the rendered pages: the detail artwork was an
+  inline image, so it shared a line box with the back link and sat on top of it; sprite boxes had no
+  fixed size, so every row was a different height; and the stat rows printed raw API names
+  (`hp`, `special-attack`)
+- Bundle went from two pages and 48 kB of CSS to one page and 2.1 kB of CSS
+
 ### 2026-10-01: Field Guide edition
 
-New page, written as its own entry and stylesheet so the HUD edition keeps the look it already had:
-
-- `design.html` and `src/design/`: a risograph print layout with a masthead rail, tilted specimen
-  plates with hard offset shadows, halftone paper grain, and a Day/Night paper-stock switch
-- Roster of all 1302 sheets with live search, three sorts, 18 type stamps, and paging in 60-sheet
-  runs instead of one long scroll
-- Entry spread with five sprite views (artwork, front, back, animated, shiny), animated count-up stat
-  bars, specimen data, abilities, a clickable evolution family with its triggers, and a play-cry button
-- Field team: stamp any sheet from the grid or the entry, saved under `pokedex-paper:team`, with its
-  own route at `#/roster/team`
-- Jump-to-dex-number box, `←` `→` paging between entries, `document.title` kept in sync per entry
-
-States and routing on this edition:
-
-- `#/entry/:name` deep links, browser back works, and an unknown sheet answers with `Entry not found`
-- Any address that is not a known route gets a `There is nothing at this address` page with a way home
-- Search validation: an empty box says `Type a name or a dex number first.` and an unmatched term
-  reports the spelling instead of firing a wasted request
-
-Changes to the existing edition (2 files):
-
-- A `Field Guide` link in the top bar, so the second design is reachable from the submitted URL
-- `vite.config.js` registers `design.html` as a second `rollupOptions.input`, so one build publishes
-  both pages and `npm run deploy` ships them together
-
-## Design notes
-
-The accent colour always comes from the active Pokémon or type filter, then flows into the
-background, the sprite stage ring, the stat bars and the buttons. Text drawn on top of an accent is
-picked from its luminance (`readableOn`) so it stays readable on bright types such as Electric.
-Every animation shares one motif, the scan line, and all of it switches off automatically when the
-system asks for `prefers-reduced-motion`.
+A second design was published as `design.html` with its own entry, stylesheet and `localStorage` keys.
+It was removed on 2026-10-05; the code is still in git history as commit `b7ac2b5`.
 
 Data & artwork from [PokéAPI](https://pokeapi.co/).

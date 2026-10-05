@@ -1,18 +1,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { fileURLToPath } from "node:url";
 
-// Relative base so the build works from any GitHub Pages project path.
+// base must match the repository name so assets resolve under the Pages project path.
 export default defineConfig({
-  base: "./",
+  base: "/pokedex-mini/",
   plugins: [react()],
-  build: {
-    rollupOptions: {
-      // Two standalone pages: the HUD app and the Field Guide edition.
-      input: {
-        index: fileURLToPath(new URL("./index.html", import.meta.url)),
-        design: fileURLToPath(new URL("./design.html", import.meta.url)),
-      },
-    },
-  },
 });

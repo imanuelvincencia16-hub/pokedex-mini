@@ -12,7 +12,7 @@ that sends you to a detail page, and a 404 page for anything else. No backend, o
 | List | `GET /pokemon?limit=20`, one row per Pokémon with its sprite, a padded dex number (`#001`) and a capitalized name |
 | States | "Loading Pokémon…" while the request is in flight, a red line with the server status if it fails |
 | Search | Validates an empty box before doing anything, lowercases the query, then navigates to `/pokemon/:name` |
-| Detail | Official artwork, types, the six base stats, a back link, and its own error message for a name that does not exist |
+| Detail | Official artwork on a disc tinted with the primary type colour, the types as coloured pills, the six base stats, a back link, and its own error message for a name that does not exist |
 | Routing | `HashRouter` with a shared `Layout` and an `<Outlet />`: `/`, `/pokemon/:name`, and `*` for the 404 page |
 
 Each piece does one job. `SearchForm` only decides where to send you; whether the Pokémon exists is
@@ -28,7 +28,7 @@ vite.config.js           base: "/pokedex-mini/", single entry
 src/
 ├── main.jsx             createRoot + StrictMode
 ├── App.jsx              HashRouter, Layout, the three routes
-├── config.js            API_BASE_URL, SPRITE_BASE_URL
+├── config.js            API_BASE_URL, SPRITE_BASE_URL, TYPE_COLORS, DEFAULT_ACCENT
 ├── utils.js             getIdFromUrl, capitalize, formatStatName, getSpriteUrl
 ├── index.css            one stylesheet, no framework
 ├── components/
@@ -82,7 +82,18 @@ The project was reduced to a single simple page:
   inline image, so it shared a line box with the back link and sat on top of it; sprite boxes had no
   fixed size, so every row was a different height; and the stat rows printed raw API names
   (`hp`, `special-attack`)
-- Bundle went from two pages and 48 kB of CSS to one page and 2.1 kB of CSS
+- Colour taken from the subject rather than invented: the 18 official type colours drive the detail
+  page, where the artwork disc and the type pills follow the Pokémon's own types and its primary type
+  sets the page accent; sprites sit on a soft disc so the uneven pixel padding reads evenly
+- The main page got the same treatment: the header is a full-width Pokédex red band with a ghost
+  pokéball behind the wordmark and a dark seam along its bottom edge, and the page background is three
+  layered CSS gradients (a red halo bleeding out from under that band, a faint dot grid for texture, a
+  cool vertical base) so nothing sits on flat grey. The input placeholder was darkened because it is
+  the form's only label
+- Contrast measured in the rendered page, not assumed: wordmark and Search button 4.99:1 on the band,
+  dex number 4.74:1 on the cards, and type pills 5.22:1 or better across all 18 types after dropping
+  the text mix from 72% type colour to 40%
+- Bundle went from two pages and 48 kB of CSS to one page and 4 kB of CSS
 
 ### 2026-10-01: Field Guide edition
 

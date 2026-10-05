@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { API_BASE_URL } from "../config.js";
+import { API_BASE_URL, TYPE_COLORS, DEFAULT_ACCENT } from "../config.js";
 import { capitalize, formatStatName } from "../utils.js";
 
 function DetailPage() {
@@ -56,8 +56,10 @@ function DetailPage() {
   if (isLoading) return <p className="status">Loading {name}…</p>;
   if (error) return <p className="status status-error">{error}</p>;
 
+  const accent = TYPE_COLORS[pokemon.types[0]?.type.name] ?? DEFAULT_ACCENT;
+
   return (
-    <div className="detail-page">
+    <div className="detail-page" style={{ "--accent": accent }}>
       <Link to="/" className="back-link">
         ← Back to list
       </Link>
@@ -72,7 +74,15 @@ function DetailPage() {
       />
       <h2>{capitalize(pokemon.name)}</h2>
       <p className="pokemon-types">
-        {pokemon.types.map((t) => t.type.name).join(", ")}
+        {pokemon.types.map((t) => (
+          <span
+            key={t.type.name}
+            className="type-pill"
+            style={{ "--type": TYPE_COLORS[t.type.name] ?? DEFAULT_ACCENT }}
+          >
+            {capitalize(t.type.name)}
+          </span>
+        ))}
       </p>
       <ul className="stat-list">
         {pokemon.stats.map((s) => (
